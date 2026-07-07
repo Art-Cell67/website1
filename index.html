@@ -12,11 +12,8 @@
       --blue: #F97316;
       --blue-dim: #C2410C;
       --blue-glow: rgba(249,115,22,0.2);
- codex/change-theme-to-orange-8enhr2
       --orange-soft: rgba(249,115,22,0.08);
       --orange-edge: rgba(249,115,22,0.28);
-
- main
       --bg: #0A0A0F;
       --surface: #12121A;
       --surface2: #1C1C28;
@@ -87,6 +84,72 @@
     }
 
     .game-hud strong { color: var(--blue); }
+
+
+    .game-arena {
+      position: fixed;
+      inset: 0;
+      z-index: 115;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .is-playing .game-arena,
+    .game-finished .game-arena { opacity: 1; }
+
+    .game-player, .game-orb, .game-hazard {
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+
+    .game-player {
+      width: 34px;
+      height: 34px;
+      border: 2px solid #fff;
+      background: radial-gradient(circle, #fff 0 18%, var(--blue) 24% 100%);
+      box-shadow: 0 0 28px rgba(249,115,22,0.9), 0 0 58px rgba(249,115,22,0.45);
+    }
+
+    .game-orb {
+      width: 24px;
+      height: 24px;
+      background: #fff7ed;
+      box-shadow: 0 0 20px #fff7ed, 0 0 42px rgba(249,115,22,0.9);
+    }
+
+    .game-hazard {
+      width: 52px;
+      height: 52px;
+      border: 2px solid #fb7185;
+      background: radial-gradient(circle, rgba(251,113,133,0.95), rgba(127,29,29,0.35));
+      box-shadow: 0 0 26px rgba(251,113,133,0.75);
+    }
+
+    .game-message {
+      position: absolute;
+      left: 50%;
+      top: 96px;
+      transform: translateX(-50%);
+      padding: 12px 18px;
+      border: 1px solid rgba(249,115,22,0.38);
+      border-radius: 14px;
+      background: rgba(10,10,15,0.78);
+      box-shadow: 0 18px 70px rgba(249,115,22,0.16);
+      backdrop-filter: blur(14px);
+      color: var(--text);
+      font-family: var(--font-display);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .is-playing .game-message,
+    .game-finished .game-message { opacity: 1; }
 
     .is-playing nav,
     .is-playing section,
@@ -788,7 +851,10 @@
 <body>
   <canvas id="shader-canvas" aria-hidden="true"></canvas>
   <div class="shader-vignette" aria-hidden="true"></div>
-  <div class="game-hud"><kbd>W</kbd><span>Press <strong>W</strong> to launch the orange 3D shader runner</span></div>
+  <div class="game-hud"><kbd>G</kbd><span>Press <strong>G</strong> to play Neon Drift: collect 8 orbs before danger hits</span></div>
+  <div class="game-arena" aria-hidden="true">
+    <div class="game-message"></div>
+  </div>
   <nav>
     <a href="#" class="nav-logo">Anon<span>123</span></a>
     <ul class="nav-links">
@@ -1012,9 +1078,126 @@
     const canvas = document.getElementById('shader-canvas');
     const gl = canvas.getContext('webgl', { antialias: true, alpha: false });
     let gameActive = false;
+    let gameFinished = false;
     let gameStart = 0;
-    let mouseX = 0;
-    let mouseY = 0;
+    let mouseX = 0.5;
+    let mouseY = 0.5;
+    const gameGoal = 8;
+    const gameState = { player: null, orbs: [], hazards: [], score: 0, message: null };
+
+
+    const arena = document.querySelector('.game-arena');
+    gameState.message = document.querySelector('.game-message');
+
+    const randomPoint = (margin = 80) => ({
+      x: margin + Math.random() * Math.max(1, innerWidth - margin * 2),
+      y: margin + Math.random() * Math.max(1, innerHeight - margin * 2)
+    });
+
+    const placeElement = (element, x, y) => {
+      element.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
+    };
+
+    const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+    function clearGamePieces() {
+      [...gameState.orbs, ...gameState.hazards].forEach(item => item.element.remove());
+      gameState.orbs = [];
+      gameState.hazards = [];
+      if (gameState.player) gameState.player.remove();
+      gameState.player = null;
+    }
+
+    function spawnOrb() {
+      const element = document.createElement('div');
+      element.className = 'game-orb';
+      const orb = { ...randomPoint(), element };
+      arena.appendChild(element);
+      placeElement(element, orb.x, orb.y);
+      gameState.orbs.push(orb);
+    }
+
+    function spawnHazard(index) {
+      const element = document.createElement('div');
+      element.className = 'game-hazard';
+      const hazard = {
+        ...randomPoint(120),
+        vx: (index % 2 ? -1 : 1) * (1.25 + Math.random() * 1.1),
+        vy: (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 1.25),
+        element
+      };
+      arena.appendChild(element);
+      gameState.hazards.push(hazard);
+    }
+
+    function startGame() {
+      clearGamePieces();
+      gameActive = true;
+      gameFinished = false;
+      gameStart = performance.now() * 0.001;
+      gameState.score = 0;
+      gameState.player = document.createElement('div');
+      gameState.player.className = 'game-player';
+      arena.appendChild(gameState.player);
+      for (let i = 0; i < 3; i++) spawnOrb();
+      for (let i = 0; i < 4; i++) spawnHazard(i);
+      document.body.classList.add('is-playing');
+      document.body.classList.remove('game-finished');
+      updateHud('Collect 8 glowing orbs. Avoid pink hazards. Press <strong>G</strong> to pause.');
+    }
+
+    function endGame(result) {
+      gameActive = false;
+      gameFinished = result === 'won' || result === 'lost';
+      document.body.classList.remove('is-playing');
+      document.body.classList.toggle('game-finished', gameFinished);
+      const messages = {
+        won: 'You won! Clean run complete — press <strong>G</strong> to play again.',
+        lost: 'You lost! A hazard clipped you — press <strong>G</strong> to retry.',
+        paused: 'Press <strong>G</strong> to launch Neon Drift again.'
+      };
+      updateHud(messages[result]);
+      if (result === 'paused') clearGamePieces();
+    }
+
+    function updateHud(text) {
+      document.querySelector('.game-hud span').innerHTML = text;
+      if (gameState.message) gameState.message.innerHTML = `Score ${gameState.score}/${gameGoal} · ${text}`;
+    }
+
+    function updateGame(time) {
+      if (!gameActive || !gameState.player) return;
+      const player = { x: mouseX * innerWidth, y: (1 - mouseY) * innerHeight };
+      placeElement(gameState.player, player.x, player.y);
+
+      gameState.orbs.forEach((orb, index) => {
+        orb.y += Math.sin(time * 3 + index) * 0.45;
+        placeElement(orb.element, orb.x, orb.y);
+        if (distance(player, orb) < 34) {
+          orb.element.remove();
+          gameState.orbs.splice(index, 1);
+          gameState.score += 1;
+          if (gameState.score >= gameGoal) {
+            endGame('won');
+            return;
+          }
+          spawnOrb();
+          if (gameState.score === 3 || gameState.score === 6) spawnHazard(gameState.hazards.length);
+          updateHud('Nice! Keep collecting orbs and dodge the hazards.');
+        }
+      });
+
+      gameState.hazards.forEach((hazard, index) => {
+        const speedBoost = 1 + gameState.score * 0.07;
+        hazard.x += hazard.vx * speedBoost;
+        hazard.y += hazard.vy * speedBoost;
+        if (hazard.x < 30 || hazard.x > innerWidth - 30) hazard.vx *= -1;
+        if (hazard.y < 84 || hazard.y > innerHeight - 30) hazard.vy *= -1;
+        hazard.x += Math.sin(time * 1.6 + index) * 0.55;
+        placeElement(hazard.element, hazard.x, hazard.y);
+        if (distance(player, hazard) < 43) endGame('lost');
+      });
+    }
 
     if (gl) {
       const vertexShaderSource = `
@@ -1133,7 +1316,8 @@
 
       const render = (now) => {
         const time = now * 0.001;
-        const score = gameActive ? (time - gameStart) * 100 : 0;
+        const score = gameActive ? (time - gameStart) * 100 + gameState.score * 150 : gameState.score * 150;
+        updateGame(time);
         gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
         gl.uniform1f(uniforms.time, time);
         gl.uniform1f(uniforms.game, gameActive ? 1 : 0);
@@ -1149,13 +1333,12 @@
         mouseY = 1 - event.clientY / innerHeight;
       });
       window.addEventListener('keydown', (event) => {
-        if (event.key.toLowerCase() === 'w' && !event.repeat) {
-          gameActive = !gameActive;
-          gameStart = performance.now() * 0.001;
-          document.body.classList.toggle('is-playing', gameActive);
-          document.querySelector('.game-hud span').innerHTML = gameActive
-            ? 'Shader runner active — steer with your mouse, press <strong>W</strong> to pause'
-            : 'Press <strong>W</strong> to launch the orange 3D shader runner';
+        if (event.key.toLowerCase() === 'g' && !event.repeat) {
+          if (gameActive) {
+            endGame('paused');
+          } else {
+            startGame();
+          }
         }
       });
       resize();
