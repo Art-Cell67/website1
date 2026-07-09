@@ -209,6 +209,28 @@
 
     .nav-cta:hover { background: var(--blue-dim) !important; color: #fff !important; }
 
+    .floating-talk {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 20;
+      background: var(--blue);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 999px;
+      padding: 14px 22px;
+      font-weight: 700;
+      box-shadow: 0 18px 45px rgba(249,115,22,0.35);
+      animation: ctaPulse 2.4s ease-in-out infinite;
+    }
+
+    .floating-talk:hover { background: var(--blue-dim); transform: translateY(-2px); }
+
+    @keyframes ctaPulse {
+      0%, 100% { box-shadow: 0 18px 45px rgba(249,115,22,0.35); }
+      50% { box-shadow: 0 18px 62px rgba(249,115,22,0.58); }
+    }
+
     .hero {
       min-height: 100vh;
       display: flex;
@@ -523,6 +545,38 @@
     }
 
     .contact-form { display: flex; flex-direction: column; gap: 16px; }
+
+    .need-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+    }
+
+    .need-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 12px;
+      color: var(--text);
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .need-option input { accent-color: var(--blue); }
+
+    .contact-proof {
+      margin-top: 28px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.92rem;
+    }
 
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
@@ -855,6 +909,7 @@
   <div class="game-arena" aria-hidden="true">
     <div class="game-message"></div>
   </div>
+  <a href="#contact" class="floating-talk" aria-label="Jump to contact form">Let's Talk →</a>
   <nav>
     <a href="#" class="nav-logo">Anon<span>123</span></a>
     <ul class="nav-links">
@@ -988,51 +1043,21 @@
     </div>
     <div class="about-content">
       <div class="section-tag">About Me</div>
-      <div class="section-title">I turn business ideas into real websites</div>
-      <p class="section-sub">Hi, I'm Anonymous 123 — a web designer focused on helping businesses of all sizes get online and stand out. I believe a great website should be easy to use, honest about what you offer, and built to last.</p>
+      <div class="section-title">Briefly: I build websites that win clients</div>
+      <p class="section-sub">I'm Anonymous 123. I keep the process simple: understand your offer, build a sharp site, and make it easy for visitors to contact you.</p>
       <ul class="about-list">
-        <li>Custom designs — no cookie-cutter templates</li>
-        <li>Clear communication throughout the process</li>
-        <li>Delivered on time, every time</li>
-        <li>Affordable pricing for small businesses</li>
+        <li>50+ business sites delivered</li>
+        <li>Fast turnaround with clear updates</li>
+        <li>Design, SEO, mobile, and maintenance handled together</li>
       </ul>
-      <a href="#contact" class="btn-primary">Work With Me</a>
-    </div>
-  </section>
-
-  <section id="story" class="content-section">
-    <div class="section-tag">My Story</div>
-    <div class="section-title">From a curious self-taught coder to building real business websites</div>
-    <div class="timeline">
-      <div class="timeline-item"><div class="timeline-year">2021</div><div><h4>First Line of Code</h4><p>Taught myself HTML and CSS by rebuilding favorite websites from scratch.</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2022</div><div><h4>First Paid Project</h4><p>Built a website for a friend's bakery and turned it into a real client experience.</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2023</div><div><h4>Completed Web Development Certification</h4><p>Sharpened skills in responsive design, JavaScript, and backend basics.</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2024</div><div><h4>Went Full-Time</h4><p>Committed fully to designing sites for small and growing businesses.</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2025</div><div><h4>Crossed 50 Projects</h4><p>Delivered my 50th business website across multiple industries.</p></div></div>
-      <div class="timeline-item"><div class="timeline-year">2026</div><div><h4>Today</h4><p>Still doing what I love — helping businesses look as credible online as they are in person.</p></div></div>
-    </div>
-
-    <div class="section-tag">Skills &amp; Qualifications</div>
-    <div class="section-title">What I bring to every project</div>
-    <div class="skills-grid">
-      <div class="skill-pill">HTML, CSS &amp; JavaScript</div>
-      <div class="skill-pill">Responsive Web Design</div>
-      <div class="skill-pill">UI / UX Design Principles</div>
-      <div class="skill-pill">Search Engine Optimization</div>
-      <div class="skill-pill">Brand Identity Design</div>
-      <div class="skill-pill">Figma &amp; Adobe XD</div>
-      <div class="skill-pill">Website Performance Optimization</div>
-      <div class="skill-pill">Client Communication</div>
-      <div class="skill-pill">Full-Stack Web Development Certificate</div>
-      <div class="skill-pill">Google Analytics Fundamentals</div>
-      <div class="skill-pill">Project Management</div>
-      <div class="skill-pill">Ongoing Site Maintenance</div>
+      <a href="#portfolio" class="btn-primary">See Client Stories</a>
     </div>
   </section>
 
   <section id="portfolio">
-    <div class="section-tag">Portfolio</div>
+    <div class="section-tag">Client Stories</div>
     <div class="section-title">Real businesses, real results</div>
+    <p class="section-sub">My story is simple: self-taught coder to full-time web designer after helping small businesses turn messy ideas into clear, professional websites.</p>
     <div class="portfolio-grid">
       <div class="portfolio-card"><div class="portfolio-card-top"><div class="portfolio-site-name">Olive &amp; Oak Bistro</div><span class="portfolio-tag">Restaurant</span></div><p class="portfolio-quote">Online reservations went up by 40% in the first month after launch.</p><div class="portfolio-client"><strong>Maria Santos</strong> — Owner</div></div>
       <div class="portfolio-card"><div class="portfolio-card-top"><div class="portfolio-site-name">Bright Smile Dental</div><span class="portfolio-tag">Healthcare</span></div><p class="portfolio-quote">We finally have a site that looks as professional as our clinic.</p><div class="portfolio-client"><strong>Dr. Aisha Raheem</strong> — Founder</div></div>
@@ -1047,11 +1072,12 @@
     <div class="contact-wrap">
       <div class="contact-info">
         <div class="section-tag">Get In Touch</div>
-        <div class="section-title">Let's build your website</div>
-        <p>Have a project in mind? Send me a message and I'll get back to you within 24 hours with a free consultation.</p>
+        <div class="section-title">Pick what you need — I'll handle the rest</div>
+        <p>Choose the skills your project needs, send one short note, and I'll reply within 24 hours with a clear next step.</p>
         <div class="contact-detail"><div class="contact-detail-icon">Mail</div><span>anonymous123@email.com</span></div>
         <div class="contact-detail"><div class="contact-detail-icon">Loc</div><span>Available Worldwide — Remote Only</span></div>
         <div class="contact-detail"><div class="contact-detail-icon">Time</div><span>Response within 24 hours</span></div>
+        <div class="contact-proof">Not sure what to ask for? Just tick a few boxes. I can turn that into a simple plan and quote.</div>
       </div>
       <form class="contact-form" onsubmit="handleSubmit(event)">
         <div class="form-row">
@@ -1059,7 +1085,18 @@
           <div class="form-group"><label for="email">Email</label><input type="email" id="email" placeholder="you@example.com" required /></div>
         </div>
         <div class="form-group"><label for="business">Business Type</label><input type="text" id="business" placeholder="e.g. Restaurant, Salon, Law Firm" /></div>
-        <div class="form-group"><label for="message">Tell me about your project</label><textarea id="message" placeholder="What kind of website do you need? Any features you have in mind?" required></textarea></div>
+        <div class="form-group">
+          <label>What do you need help with?</label>
+          <div class="need-options">
+            <label class="need-option"><input type="checkbox" name="needs" value="Custom website" /> Custom website</label>
+            <label class="need-option"><input type="checkbox" name="needs" value="Mobile design" /> Mobile design</label>
+            <label class="need-option"><input type="checkbox" name="needs" value="SEO setup" /> SEO setup</label>
+            <label class="need-option"><input type="checkbox" name="needs" value="Speed fixes" /> Speed fixes</label>
+            <label class="need-option"><input type="checkbox" name="needs" value="Brand polish" /> Brand polish</label>
+            <label class="need-option"><input type="checkbox" name="needs" value="Maintenance" /> Maintenance</label>
+          </div>
+        </div>
+        <div class="form-group"><label for="message">Tell me about your project</label><textarea id="message" placeholder="A few lines is enough — I'll help shape the plan." required></textarea></div>
         <button type="submit" class="form-submit">Send Message →</button>
       </form>
     </div>
