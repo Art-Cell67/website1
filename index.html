@@ -37,7 +37,7 @@
     }
 
     #shader-canvas {
-      position: fixed;
+      position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
@@ -46,7 +46,7 @@
     }
 
     .shader-vignette {
-      position: fixed;
+      position: absolute;
       inset: 0;
       z-index: -1;
       pointer-events: none;
@@ -201,35 +201,15 @@
     .nav-cta {
       background: var(--blue);
       color: #fff !important;
-      padding: 8px 20px;
-      border-radius: 8px;
-      font-weight: 500;
-      transition: background 0.2s !important;
-    }
-
-    .nav-cta:hover { background: var(--blue-dim) !important; color: #fff !important; }
-
-    .floating-talk {
-      position: fixed;
-      right: 22px;
-      bottom: 22px;
-      z-index: 20;
-      background: var(--blue);
-      color: #fff;
-      text-decoration: none;
+      padding: 10px 22px;
       border-radius: 999px;
-      padding: 14px 22px;
       font-weight: 700;
-      box-shadow: 0 18px 45px rgba(249,115,22,0.35);
-      animation: ctaPulse 2.4s ease-in-out infinite;
+      font-family: var(--font-display);
+      box-shadow: 0 0 0 0 var(--blue-glow);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s !important;
     }
 
-    .floating-talk:hover { background: var(--blue-dim); transform: translateY(-2px); }
-
-    @keyframes ctaPulse {
-      0%, 100% { box-shadow: 0 18px 45px rgba(249,115,22,0.35); }
-      50% { box-shadow: 0 18px 62px rgba(249,115,22,0.58); }
-    }
+    .nav-cta:hover { background: var(--blue-dim) !important; color: #fff !important; transform: translateY(-1px); box-shadow: 0 6px 24px var(--blue-glow); }
 
     .hero {
       min-height: 100vh;
@@ -368,6 +348,23 @@
     }
 
     #services { background: var(--surface); }
+
+    .services-heading {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      max-width: 760px;
+      margin-bottom: 48px;
+    }
+
+    .service-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      min-height: 120px;
+      justify-content: center;
+    }
+
+    .service-card p { display: none; }
 
     .services-grid {
       display: grid;
@@ -546,38 +543,6 @@
 
     .contact-form { display: flex; flex-direction: column; gap: 16px; }
 
-    .need-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 10px;
-    }
-
-    .need-option {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 11px 12px;
-      color: var(--text);
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .need-option input { accent-color: var(--blue); }
-
-    .contact-proof {
-      margin-top: 28px;
-      padding: 18px;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: rgba(255,255,255,0.03);
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: 0.92rem;
-    }
-
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
     .form-group {
@@ -697,6 +662,25 @@
     }
 
     .content-section { padding: 20px 6vw 100px; max-width: 1100px; }
+
+    .service-detail { padding-top: 60px; padding-bottom: 60px; }
+
+    .service-num {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(3rem, 8vw, 5rem);
+      color: var(--blue);
+      opacity: 0.9;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .service-detail-text {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 460px;
+      margin-bottom: 28px;
+    }
 
     .feature-grid {
       display: grid;
@@ -903,134 +887,77 @@
   </style>
 </head>
 <body>
-  <canvas id="shader-canvas" aria-hidden="true"></canvas>
-  <div class="shader-vignette" aria-hidden="true"></div>
   <div class="game-hud"><kbd>G</kbd><span>Press <strong>G</strong> to play Neon Drift: collect 8 orbs before danger hits</span></div>
   <div class="game-arena" aria-hidden="true">
     <div class="game-message"></div>
   </div>
-  <a href="#contact" class="floating-talk" aria-label="Jump to contact form">Let's Talk →</a>
   <nav>
     <a href="#" class="nav-logo">Anon<span>123</span></a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#portfolio">Portfolio</a></li>
-      <li><a href="#contact" class="nav-cta">Let's Talk</a></li>
+      <li><a href="#contact" class="nav-cta">💬 Let's Talk</a></li>
     </ul>
   </nav>
 
   <section class="hero">
-    <span class="hero-tag">Web Designer for Businesses</span>
+    <canvas id="shader-canvas" aria-hidden="true"></canvas>
+    <div class="shader-vignette" aria-hidden="true"></div>
     <h1>Your business deserves a <span class="highlight">website that works.</span></h1>
-    <p>I design clean, professional websites that help businesses attract clients, build trust, and grow online — without the tech headache.</p>
     <div class="hero-btns">
-      <a href="#services" class="btn-primary">See What I Offer</a>
-      <a href="#contact" class="btn-ghost">Get a Free Quote</a>
-    </div>
-    <div class="hero-stats">
-      <div>
-        <div class="stat-num">50+</div>
-        <div class="stat-label">Sites Delivered</div>
-      </div>
-      <div>
-        <div class="stat-num">100%</div>
-        <div class="stat-label">Client Satisfaction</div>
-      </div>
-      <div>
-        <div class="stat-num">1 Day</div>
-        <div class="stat-label">Avg. Turnaround</div>
-      </div>
+      <a href="#contact" class="btn-primary">Let's Talk →</a>
+      <a href="#services" class="btn-ghost">See What I Offer</a>
     </div>
   </section>
 
   <section id="services">
-    <div class="section-tag">What I Do</div>
-    <div class="section-title">Services built for<br />business growth</div>
-    <p class="section-sub">Every service is designed to give your business a real online presence — not just a pretty page.</p>
+    <div class="section-title services-heading">Services built for business growth</div>
     <div class="services-grid">
       <a href="#service-website-design" class="service-card">
-        <h3>Business Website Design</h3>
-        <p>A fully custom website that reflects your brand, communicates your value, and turns visitors into customers.</p>
-        <span class="service-card-link">Learn more →</span>
+        <h3>Website Design</h3>
+        <span class="service-card-link">View example →</span>
       </a>
       <a href="#service-mobile-friendly" class="service-card">
-        <h3>Mobile-Friendly Design</h3>
-        <p>Your site will look sharp and work flawlessly on every screen — phone, tablet, or desktop.</p>
-        <span class="service-card-link">Learn more →</span>
+        <h3>Mobile-Friendly</h3>
+        <span class="service-card-link">View example →</span>
       </a>
       <a href="#service-seo" class="service-card">
         <h3>Fast &amp; SEO-Ready</h3>
-        <p>Built for speed and search engines so your business shows up where it matters — at the top of Google.</p>
-        <span class="service-card-link">Learn more →</span>
+        <span class="service-card-link">View example →</span>
       </a>
       <a href="#service-maintenance" class="service-card">
         <h3>Ongoing Maintenance</h3>
-        <p>I don't disappear after launch. Updates, fixes, and improvements — I've got you covered long-term.</p>
-        <span class="service-card-link">Learn more →</span>
+        <span class="service-card-link">View example →</span>
       </a>
     </div>
 
-    <section id="service-website-design" class="content-section">
-      <div class="section-tag">Service 01</div>
+    <section id="service-website-design" class="content-section service-detail">
+      <div class="service-num">01</div>
       <div class="section-title">Business <span class="highlight">Website Design</span></div>
-      <p class="section-sub">A fully custom website built from the ground up around your brand, your customers, and your goals.</p>
-      <div class="feature-grid">
-        <div class="feature-item"><h4>Custom Design</h4><p>Every layout, color choice, and section is designed specifically for your business.</p></div>
-        <div class="feature-item"><h4>Brand-Matched Visuals</h4><p>Your logo, colors, and tone are woven into every page so the site feels unmistakably yours.</p></div>
-        <div class="feature-item"><h4>Clear Navigation</h4><p>Visitors find what they need in seconds — services, pricing, contact info, all easy to reach.</p></div>
-        <div class="feature-item"><h4>Conversion-Focused Layout</h4><p>Every page is structured to guide visitors toward booking, buying, or contacting you.</p></div>
-        <div class="feature-item"><h4>Up to 6 Pages</h4><p>Home, About, Services, Gallery, Testimonials, and Contact — fully built and connected.</p></div>
-        <div class="feature-item"><h4>Source Files Included</h4><p>You own everything. Full code handover with no lock-in to any platform.</p></div>
-      </div>
-      <div class="process-list">
-        <div class="process-step"><div class="process-num">01</div><div><h4>Discovery Call</h4><p>We talk through your business, your audience, and what you want the site to achieve.</p></div></div>
-        <div class="process-step"><div class="process-num">02</div><div><h4>Design Draft</h4><p>I put together a first version of the design for your feedback before any heavy build work begins.</p></div></div>
-        <div class="process-step"><div class="process-num">03</div><div><h4>Build &amp; Refine</h4><p>The full site gets built, tested across devices, and refined based on your notes.</p></div></div>
-        <div class="process-step"><div class="process-num">04</div><div><h4>Launch</h4><p>Your site goes live, and I walk you through how everything works.</p></div></div>
-      </div>
+      <p class="service-detail-text">A site built entirely around your brand and your customers.</p>
+      <a href="#" class="btn-primary">View a sample site →</a>
     </section>
 
-    <section id="service-mobile-friendly" class="content-section">
-      <div class="section-tag">Service 02</div>
+    <section id="service-mobile-friendly" class="content-section service-detail">
+      <div class="service-num">02</div>
       <div class="section-title"><span class="highlight">Mobile-Friendly</span> Design</div>
-      <p class="section-sub">More than half of your visitors will land on your site from their phone. I build every site to look sharp and work flawlessly on any screen size.</p>
-      <div class="feature-grid">
-        <div class="feature-item"><h4>Responsive Layouts</h4><p>Pages reflow and resize so text, images, and buttons always stay readable and easy to tap.</p></div>
-        <div class="feature-item"><h4>Touch-Friendly Buttons</h4><p>Every clickable element is sized and spaced for fingers, not just mouse cursors.</p></div>
-        <div class="feature-item"><h4>Real Device Testing</h4><p>I test on actual phones and tablets, not just browser previews, to catch real-world issues.</p></div>
-        <div class="feature-item"><h4>Fast Mobile Load Times</h4><p>Images and code are optimized so your site loads quickly even on slower mobile connections.</p></div>
-        <div class="feature-item"><h4>Simplified Mobile Navigation</h4><p>Menus collapse into clean, easy-to-use mobile patterns so nothing feels cramped.</p></div>
-        <div class="feature-item"><h4>Consistent Branding</h4><p>Your site looks and feels the same — colors, fonts, tone — no matter what device it's viewed on.</p></div>
-      </div>
+      <p class="service-detail-text">Looks and works great on every phone, tablet, and screen.</p>
+      <a href="#" class="btn-primary">View a sample site →</a>
     </section>
 
-    <section id="service-seo" class="content-section">
-      <div class="section-tag">Service 03</div>
+    <section id="service-seo" class="content-section service-detail">
+      <div class="service-num">03</div>
       <div class="section-title">Fast &amp; <span class="highlight">SEO-Ready</span></div>
-      <p class="section-sub">A beautiful website doesn't help your business if no one can find it. Every site is built lean and fast, and structured so search engines understand exactly what your business does.</p>
-      <div class="feature-grid">
-        <div class="feature-item"><h4>Optimized Page Speed</h4><p>Clean code and compressed images mean your pages load in a couple of seconds, not ten.</p></div>
-        <div class="feature-item"><h4>SEO-Friendly Structure</h4><p>Headings, page titles, and content are organized the way search engines expect to read them.</p></div>
-        <div class="feature-item"><h4>Local SEO Setup</h4><p>If you serve a specific area, your site is set up to show up when nearby customers search for you.</p></div>
-        <div class="feature-item"><h4>Meta Descriptions &amp; Titles</h4><p>Every page gets a written summary that helps it stand out in Google search results.</p></div>
-        <div class="feature-item"><h4>Image Optimization</h4><p>Photos are compressed and labeled properly so they load fast and still get found in image search.</p></div>
-        <div class="feature-item"><h4>Analytics Setup</h4><p>I connect basic analytics so you can see how many people visit and where they come from.</p></div>
-      </div>
+      <p class="service-detail-text">Quick to load and easy for customers to find on Google.</p>
+      <a href="#" class="btn-primary">View a sample site →</a>
     </section>
 
-    <section id="service-maintenance" class="content-section">
-      <div class="section-tag">Service 04</div>
+    <section id="service-maintenance" class="content-section service-detail">
+      <div class="service-num">04</div>
       <div class="section-title">Ongoing <span class="highlight">Maintenance</span></div>
-      <p class="section-sub">Launch day isn't the finish line. I stick around to keep your site updated, secure, and running smoothly.</p>
-      <div class="feature-grid">
-        <div class="feature-item"><h4>Regular Updates</h4><p>Content changes, new photos, updated pricing — small edits handled quickly whenever you need them.</p></div>
-        <div class="feature-item"><h4>Bug Fixes</h4><p>If something breaks or looks off, it gets fixed fast, usually within the same day.</p></div>
-        <div class="feature-item"><h4>Security Monitoring</h4><p>Your site is checked regularly to catch and patch vulnerabilities before they become problems.</p></div>
-        <div class="feature-item"><h4>Backups</h4><p>Your site is backed up on a regular schedule so nothing is ever permanently lost.</p></div>
-        <div class="feature-item"><h4>Performance Checks</h4><p>I periodically review load times and fix anything slowing your site down.</p></div>
-        <div class="feature-item"><h4>Direct Line to Me</h4><p>No support tickets or call centers — you message me directly and I respond personally.</p></div>
-      </div>
+      <p class="service-detail-text">Updates, fixes, and support long after your site goes live.</p>
+      <a href="#" class="btn-primary">View a sample site →</a>
     </section>
   </section>
 
@@ -1043,21 +970,51 @@
     </div>
     <div class="about-content">
       <div class="section-tag">About Me</div>
-      <div class="section-title">Briefly: I build websites that win clients</div>
-      <p class="section-sub">I'm Anonymous 123. I keep the process simple: understand your offer, build a sharp site, and make it easy for visitors to contact you.</p>
+      <div class="section-title">I turn business ideas into real websites</div>
+      <p class="section-sub">Hi, I'm Anonymous 123 — a web designer focused on helping businesses of all sizes get online and stand out. I believe a great website should be easy to use, honest about what you offer, and built to last.</p>
       <ul class="about-list">
-        <li>50+ business sites delivered</li>
-        <li>Fast turnaround with clear updates</li>
-        <li>Design, SEO, mobile, and maintenance handled together</li>
+        <li>Custom designs — no cookie-cutter templates</li>
+        <li>Clear communication throughout the process</li>
+        <li>Delivered on time, every time</li>
+        <li>Affordable pricing for small businesses</li>
       </ul>
-      <a href="#portfolio" class="btn-primary">See Client Stories</a>
+      <a href="#contact" class="btn-primary">Work With Me</a>
+    </div>
+  </section>
+
+  <section id="story" class="content-section">
+    <div class="section-tag">My Story</div>
+    <div class="section-title">From a curious self-taught coder to building real business websites</div>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-year">2021</div><div><h4>First Line of Code</h4><p>Taught myself HTML and CSS by rebuilding favorite websites from scratch.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2022</div><div><h4>First Paid Project</h4><p>Built a website for a friend's bakery and turned it into a real client experience.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2023</div><div><h4>Completed Web Development Certification</h4><p>Sharpened skills in responsive design, JavaScript, and backend basics.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2024</div><div><h4>Went Full-Time</h4><p>Committed fully to designing sites for small and growing businesses.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2025</div><div><h4>Crossed 50 Projects</h4><p>Delivered my 50th business website across multiple industries.</p></div></div>
+      <div class="timeline-item"><div class="timeline-year">2026</div><div><h4>Today</h4><p>Still doing what I love — helping businesses look as credible online as they are in person.</p></div></div>
+    </div>
+
+    <div class="section-tag">Skills &amp; Qualifications</div>
+    <div class="section-title">What I bring to every project</div>
+    <div class="skills-grid">
+      <div class="skill-pill">HTML, CSS &amp; JavaScript</div>
+      <div class="skill-pill">Responsive Web Design</div>
+      <div class="skill-pill">UI / UX Design Principles</div>
+      <div class="skill-pill">Search Engine Optimization</div>
+      <div class="skill-pill">Brand Identity Design</div>
+      <div class="skill-pill">Figma &amp; Adobe XD</div>
+      <div class="skill-pill">Website Performance Optimization</div>
+      <div class="skill-pill">Client Communication</div>
+      <div class="skill-pill">Full-Stack Web Development Certificate</div>
+      <div class="skill-pill">Google Analytics Fundamentals</div>
+      <div class="skill-pill">Project Management</div>
+      <div class="skill-pill">Ongoing Site Maintenance</div>
     </div>
   </section>
 
   <section id="portfolio">
-    <div class="section-tag">Client Stories</div>
+    <div class="section-tag">Portfolio</div>
     <div class="section-title">Real businesses, real results</div>
-    <p class="section-sub">My story is simple: self-taught coder to full-time web designer after helping small businesses turn messy ideas into clear, professional websites.</p>
     <div class="portfolio-grid">
       <div class="portfolio-card"><div class="portfolio-card-top"><div class="portfolio-site-name">Olive &amp; Oak Bistro</div><span class="portfolio-tag">Restaurant</span></div><p class="portfolio-quote">Online reservations went up by 40% in the first month after launch.</p><div class="portfolio-client"><strong>Maria Santos</strong> — Owner</div></div>
       <div class="portfolio-card"><div class="portfolio-card-top"><div class="portfolio-site-name">Bright Smile Dental</div><span class="portfolio-tag">Healthcare</span></div><p class="portfolio-quote">We finally have a site that looks as professional as our clinic.</p><div class="portfolio-client"><strong>Dr. Aisha Raheem</strong> — Founder</div></div>
@@ -1072,12 +1029,11 @@
     <div class="contact-wrap">
       <div class="contact-info">
         <div class="section-tag">Get In Touch</div>
-        <div class="section-title">Pick what you need — I'll handle the rest</div>
-        <p>Choose the skills your project needs, send one short note, and I'll reply within 24 hours with a clear next step.</p>
+        <div class="section-title">Let's build your website</div>
+        <p>Have a project in mind? Send me a message and I'll get back to you within 24 hours with a free consultation.</p>
         <div class="contact-detail"><div class="contact-detail-icon">Mail</div><span>anonymous123@email.com</span></div>
         <div class="contact-detail"><div class="contact-detail-icon">Loc</div><span>Available Worldwide — Remote Only</span></div>
         <div class="contact-detail"><div class="contact-detail-icon">Time</div><span>Response within 24 hours</span></div>
-        <div class="contact-proof">Not sure what to ask for? Just tick a few boxes. I can turn that into a simple plan and quote.</div>
       </div>
       <form class="contact-form" onsubmit="handleSubmit(event)">
         <div class="form-row">
@@ -1085,18 +1041,7 @@
           <div class="form-group"><label for="email">Email</label><input type="email" id="email" placeholder="you@example.com" required /></div>
         </div>
         <div class="form-group"><label for="business">Business Type</label><input type="text" id="business" placeholder="e.g. Restaurant, Salon, Law Firm" /></div>
-        <div class="form-group">
-          <label>What do you need help with?</label>
-          <div class="need-options">
-            <label class="need-option"><input type="checkbox" name="needs" value="Custom website" /> Custom website</label>
-            <label class="need-option"><input type="checkbox" name="needs" value="Mobile design" /> Mobile design</label>
-            <label class="need-option"><input type="checkbox" name="needs" value="SEO setup" /> SEO setup</label>
-            <label class="need-option"><input type="checkbox" name="needs" value="Speed fixes" /> Speed fixes</label>
-            <label class="need-option"><input type="checkbox" name="needs" value="Brand polish" /> Brand polish</label>
-            <label class="need-option"><input type="checkbox" name="needs" value="Maintenance" /> Maintenance</label>
-          </div>
-        </div>
-        <div class="form-group"><label for="message">Tell me about your project</label><textarea id="message" placeholder="A few lines is enough — I'll help shape the plan." required></textarea></div>
+        <div class="form-group"><label for="message">Tell me about your project</label><textarea id="message" placeholder="What kind of website do you need? Any features you have in mind?" required></textarea></div>
         <button type="submit" class="form-submit">Send Message →</button>
       </form>
     </div>
